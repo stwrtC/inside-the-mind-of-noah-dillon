@@ -1,0 +1,33 @@
+name: Daily RSS Feed Poster
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs at 09:00 UTC every day
+  workflow_dispatch:     # Allows manual trigger too
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run daily RSS script
+      run: node dailyRSS.js
+
+    - name: Commit RSS feed
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add feed.xml
+        git commit -m "Update RSS feed: $(date -u +'%Y-%m-%d')" || echo "No changes to commit"
+        git push
