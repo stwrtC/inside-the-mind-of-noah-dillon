@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { format } = require('path');
 const RSS = require('rss');
 
 const dataPath = './data.json';
@@ -60,14 +61,11 @@ const feed = new RSS({
     site_url: 'https://stwrtc.github.io/inside-the-mind-of-noah-dillon',
     pubDate: new Date()
 });
+let fomattedDescription = item.tweet_text + '\n' + "💬" + item.reply_count + '    ' + "🔁" + item.retweet_count + '    ' + "❤️" + item.favourite_count;
 
 feed.item({
-    title: item.owner_display_name,
-    description: item.tweet_text,
-    creation: item.created_at,
-    replies: item.reply_count,
-    retweets: item.retweet_count,
-    favourites: item.favourite_count,
+    title: item.created_at,
+    description: formattedDescription,
     url: item.address,
     date: new Date()
 });
