@@ -4,9 +4,19 @@ const RSS = require('rss');
 const data = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
 const historyPath = './history.json';
 let history = [];
+
 if (fs.existsSync(historyPath)) {
-  const content = fs.readFileSync(historyPath, 'utf8').trim();
-  history = content ? JSON.parse(content) : [];
+  try {
+    const content = fs.readFileSync(historyPath, 'utf8').trim();
+    history = content ? JSON.parse(content) : [];
+  } catch (err) {
+    console.error('❌ Failed to parse history.json. Is it valid JSON?');
+    console.error(err.message);
+    process.exit(1);
+  }
+} else {
+  // If the file doesn't exist, create it with empty array
+  fs.writeFileSync(historyPath, JSON.stringify([], null, 2));
 }
 
 // Filter unused posts
