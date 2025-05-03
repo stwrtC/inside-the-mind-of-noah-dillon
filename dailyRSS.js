@@ -61,7 +61,7 @@ const feed = new RSS({
     site_url: 'https://stwrtc.github.io/inside-the-mind-of-noah-dillon',
     pubDate: new Date()
 });
-let formattedDescription = item.tweet_text + '\n' + "💬" + item.reply_count + '    ' + "🔁" + item.retweet_count + '    ' + "❤️" + item.favourite_count;
+let formattedDescription = item.tweet_text + '\n' + "💬" + item.reply_count + '    ' + "🔁" + item.retweet_count + '    ' + "❤️" + item.favorite_count;
 
 feed.item({
     title: item.created_at,
