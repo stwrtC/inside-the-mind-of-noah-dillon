@@ -3,21 +3,23 @@ const RSS = require('rss');
 
 const data = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
 const historyPath = './history.json';
+
 let history = [];
 
-if (fs.existsSync(historyPath)) {
-  try {
-    const content = fs.readFileSync(historyPath, 'utf8').trim();
-    history = content ? JSON.parse(content) : [];
-  } catch (err) {
-    console.error('❌ Failed to parse history.json. Is it valid JSON?');
-    console.error(err.message);
-    process.exit(1);
-  }
-} else {
-  // If the file doesn't exist, create it with empty array
-  fs.writeFileSync(historyPath, JSON.stringify([], null, 2));
+if (!fs.existsSync(historyPath)) {
+  console.log('Creating missing history.json...');
+  fs.writeFileSync(historyPath, '[]');
 }
+
+try {
+  const content = fs.readFileSync(historyPath, 'utf8').trim();
+  history = content ? JSON.parse(content) : [];
+} catch (err) {
+  console.error('❌ history.json is invalid JSON.');
+  console.error(err.message);
+  process.exit(1);
+
+} 
 
 // Filter unused posts
 const unusedPosts = data.filter(post => !history.includes(post.id));
